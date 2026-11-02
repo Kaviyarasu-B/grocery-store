@@ -1,0 +1,1490 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshMart - Grocery Management</title>
+
+    
+    
+    
+ <style>
+ 
+:root {
+    --primary: #16834a;
+    --primary-dark: #116638;
+    --primary-light: #e9f7ef;
+    --background: #f5f8f6;
+    --surface: #ffffff;
+    --text: #1f2937;
+    --muted: #718096;
+    --border: #e5ebe7;
+    --shadow: 0 4px 18px rgba(24, 55, 38, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(120deg, #116638, #16834a);
+    color: white;
+    padding: 24px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+header p {
+    margin: 4px 0 0;
+    color: #e2f5e9;
+    font-size: 14px;
+}
+
+.container,
+main {
+    width: 92%;
+    max-width: 1400px;
+    margin: 30px auto;
+}
+
+/* NAVIGATION */
+
+.dashboard-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 4%;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.dashboard-nav a {
+    padding: 9px 17px;
+    color: #365343;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.dashboard-nav a:hover {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+/* HEADINGS */
+
+h2 {
+    margin-top: 28px;
+    margin-bottom: 14px;
+    color: #173f2a;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+h3 {
+    color: #294b38;
+    font-size: 17px;
+    font-weight: 650;
+}
+
+/* DASHBOARD SUMMARY CARDS */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin: 28px 0;
+}
+
+.card {
+    background: var(--surface);
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 25px rgba(24, 55, 38, 0.09);
+}
+
+.card h3 {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.card p {
+    margin: 0;
+    color: var(--primary-dark);
+    font-size: 29px;
+    font-weight: 750;
+}
+
+/* GENERAL SECTIONS */
+
+#salesSummary,
+#billingSection,
+#recentBillsSection {
+    margin-top: 30px;
+    padding: 26px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+}
+
+#salesSummary > div {
+    gap: 18px;
+}
+
+#salesSummary > div > div {
+    background: #f1f8f3 !important;
+    border: 1px solid #e0eee4;
+    border-radius: 12px !important;
+    padding: 22px !important;
+}
+
+#salesSummary h3 {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+#salesSummary p {
+    color: var(--primary-dark);
+}
+
+/* TABLES */
+
+.inventory-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.inventory-wrapper table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+.inventory-wrapper th {
+    padding: 15px 17px;
+    background: #edf6f0;
+    color: #245c3b;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.inventory-wrapper td {
+    padding: 14px 17px;
+    border-bottom: 1px solid #edf1ee;
+    color: #39483e;
+}
+
+.inventory-wrapper tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.inventory-wrapper tbody tr:hover {
+    background: #f7fbf8;
+}
+
+/* FORMS */
+
+input,
+select,
+textarea {
+    width: auto;
+    min-height: 43px;
+    padding: 10px 13px;
+    border: 1px solid #d8e2db;
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(22, 131, 74, 0.10);
+}
+
+/* PRODUCT FORM */
+
+.product-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px;
+    padding: 22px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    box-shadow: var(--shadow);
+}
+
+.product-form input {
+    flex: 1 1 180px;
+}
+
+/* BILLING */
+
+#billingSection > div:first-of-type {
+    align-items: center;
+}
+
+#billingSection .customer-details {
+    margin-top: 22px;
+    padding: 20px;
+    background: #f6faf7;
+    border: 1px solid #e2eee5;
+    border-radius: 12px;
+}
+
+#billingSection .customer-details h3 {
+    margin-top: 0;
+}
+
+#billingSection .customer-details input {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 10px 0;
+    background: white;
+}
+
+#billingSection h3 {
+    color: var(--primary-dark);
+}
+
+/* BUTTONS */
+
+button {
+    min-height: 40px;
+    padding: 10px 17px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 10px rgba(17, 102, 56, 0.15);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:focus-visible {
+    outline: 3px solid #a8dfbd;
+    outline-offset: 2px;
+}
+
+/* QUICK ACTIONS */
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-top: 16px;
+}
+
+/* STATUS MESSAGES */
+
+#inventoryMessage,
+#productMessage,
+#billingMessage,
+#recentBillsMessage,
+#salesSummaryMessage,
+#message {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+/* FOOTER */
+
+footer {
+    margin-top: 45px;
+    padding: 22px;
+    background: #123f29;
+    color: #e5f4e9;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .container,
+    main {
+        width: 94%;
+    }
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    #salesSummary,
+    #billingSection,
+    #recentBillsSection {
+        padding: 17px;
+    }
+
+    .dashboard-nav {
+        gap: 6px;
+    }
+
+    .dashboard-nav a {
+        padding: 8px 11px;
+    }
+
+    .product-form {
+        flex-direction: column;
+    }
+
+    .product-form input,
+    #billingSection select,
+    #billingSection input {
+        width: 100%;
+    }
+}
+
+</style>
+
+
+</head>
+
+<body>
+<header>
+    <div>
+        <h1>🛒 FreshMart</h1>
+        <p>Grocery Store Management System</p>
+    </div>
+
+    <button type="button" onclick="logoutAdmin()">
+        Logout
+    </button>
+</header>
+
+
+<nav class="dashboard-nav">
+    <a href="#salesSummary">Dashboard</a>
+    <a href="#productsSection">Products</a>
+    <a href="#billingSection">Billing</a>
+    <a href="#recentBillsSection">Recent Bills</a>
+</nav>
+
+
+
+<main class="container">
+
+    <h2>Dashboard</h2>
+    <p>Welcome! Manage your grocery store from one place.</p>
+
+    <section class="cards">
+        <div class="card">
+            <h3>Total Products</h3>
+            <p id="products">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Stock Units</h3>
+            <p id="stock">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Today's Sales</h3>
+            <p id="sales">₹0.00</p>
+        </div>
+    </section>
+
+    
+    
+
+<h2 id="productsSection">Product Inventory</h2>
+
+<input
+    type="text"
+    id="searchInput"
+    placeholder="Search products by name or ID..."
+    oninput="searchProducts()"
+    style="width:100%; max-width:400px; margin-top:15px;"
+>
+
+<div class="inventory-wrapper">
+
+        <table>
+            
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Price (₹)</th>
+        <th>Quantity</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+            <tbody id="productTable">
+                <tr>
+                    <td colspan="4">Loading products...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p id="inventoryMessage" role="status"></p>
+    
+    
+<section id="salesSummary" style="margin-top: 30px;">
+    <h2>Sales Summary</h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+        <div style="flex: 1; min-width: 180px; padding: 20px; border-radius: 10px; background: #e8f5e9;">
+            <h3>Total Revenue</h3>
+            <p style="font-size: 26px; font-weight: bold;">
+                ₹<span id="totalRevenue">0.00</span>
+            </p>
+        </div>
+
+        <div style="flex: 1; min-width: 180px; padding: 20px; border-radius: 10px; background: #e3f2fd;">
+            <h3>Completed Bills</h3>
+            <p style="font-size: 26px; font-weight: bold;" id="totalBills">0</p>
+        </div>
+
+        <div style="flex: 1; min-width: 180px; padding: 20px; border-radius: 10px; background: #fff3e0;">
+            <h3>Average Bill Value</h3>
+            <p style="font-size: 26px; font-weight: bold;">
+                ₹<span id="averageBill">0.00</span>
+            </p>
+        </div>
+    </div>
+
+    <p id="salesSummaryMessage" role="status" style="margin-top: 12px;"></p>
+</section>
+    
+    
+    
+<!-- Billing Section -->
+<section id="billingSection" style="margin-top:35px;">
+    <h2>Create Customer Bill</h2>
+    <p style="margin-top:8px;">
+        Select grocery products, enter quantities, and prepare a bill.
+    </p>
+
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+        <select id="billProduct"
+                style="padding:12px; min-width:220px; border:1px solid #ccc; border-radius:6px;">
+            <option value="">Select a product</option>
+        </select>
+
+        <input type="number"
+               id="billQuantity"
+               placeholder="Quantity"
+               min="1"
+               step="1"
+               value="1">
+
+        <button type="button" onclick="addToCart()">
+            Add to Bill
+        </button>
+    </div>
+
+    <div class="inventory-wrapper">
+        <table style="margin-top:20px;">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Unit Price (₹)</th>
+                    <th>Quantity</th>
+                    <th>Subtotal (₹)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="billCart">
+                <tr>
+                    <td colspan="5">No items added yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3 style="margin-top:20px;">
+        Bill Total: ₹<span id="billTotal">0.00</span>
+    </h3>
+
+    
+<!-- Customer Details -->
+<div class="customer-details">
+    <h3>Customer Details</h3>
+
+    <input
+        type="text"
+        id="customerName"
+        placeholder="Customer name (optional)"
+        maxlength="100">
+
+    <input
+        type="tel"
+        id="customerPhone"
+        placeholder="Customer phone number (optional)"
+        maxlength="15">
+</div>
+
+<button type="button"
+    id="createBillButton"
+    onclick="createBill()"
+    style="margin-top:15px;">
+    Complete Sale
+</button>
+
+
+    <p id="billingMessage" role="status" style="margin-top:12px;"></p>
+</section>
+<!-- End Billing Section -->
+    
+
+    <h2 style="margin-top: 30px;">Add a Product</h2>
+
+    <form id="productForm" class="product-form">
+        <input
+            type="text"
+            id="name"
+            placeholder="Product name"
+            required
+            maxlength="100">
+
+        <input
+            type="number"
+            id="price"
+            placeholder="Price (₹)"
+            min="0.01"
+            step="0.01"
+            required>
+
+        <input
+            type="number"
+            id="quantity"
+            placeholder="Quantity"
+            min="0"
+            step="1"
+            required>
+
+        <button type="submit" id="saveButton">Save Product</button>
+    </form>
+
+    <p id="productMessage" role="status"></p>
+
+    <h2 style="margin-top: 30px;">Quick Actions</h2>
+
+    <div class="actions">
+        <button type="button"
+            onclick="showMessage('Product inventory is displayed above.')">
+            Manage Products
+        </button>
+
+        <button type="button"
+            onclick="showMessage('Billing will be implemented next.')">
+            Create Bill
+        </button>
+
+        
+<button type="button"
+    onclick="document.getElementById('salesSummary').scrollIntoView({ behavior: 'smooth' })">
+    View Reports
+</button>
+
+    </div>
+
+    <p id="message" role="status"></p>
+
+<button type="button"
+    onclick="document.getElementById('salesSummary').scrollIntoView({ behavior: 'smooth' })">
+    View Reports
+</button>
+
+    
+</main>
+
+<section id="recentBillsSection" style="margin-top: 35px;">
+    <h2>Recent Bills</h2>
+    <p style="margin-top: 8px;">View previously completed sales.</p>
+
+    
+<div class="inventory-wrapper">
+    <table style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>Bill ID</th>
+                <th>Date &amp; Time</th>
+                <th>Customer Name</th>
+                <th>Customer Phone</th>
+                <th>Products</th>
+                <th>Total Amount (₹)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="recentBillsTable">
+            <tr>
+                <td colspan="7">Loading bills...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+    <button type="button" onclick="loadRecentBills()"
+            style="margin-top: 15px;">
+        Refresh Bills
+    </button>
+    <p id="recentBillsMessage" role="status"
+       style="margin-top: 10px;"></p>
+</section>
+
+
+<footer>
+    Freshmart Grocery Management System
+</footer>
+
+<script>
+    // Display messages for the Quick Actions buttons.
+    
+    
+let billingProducts = [];
+let billCartItems = [];
+
+
+
+async function createBill() {
+
+    const message = document.getElementById("billingMessage");
+    const button = document.getElementById("createBillButton");
+
+    if (billCartItems.length === 0) {
+        message.textContent = "Please add products to the bill first.";
+        return;
+    }
+
+    const customerName =
+        document.getElementById("customerName").value.trim();
+
+    const customerPhone =
+        document.getElementById("customerPhone").value.trim();
+
+    const csrfCookie = document.cookie
+        .split("; ")
+        .find(row => row.startsWith("XSRF-TOKEN="));
+
+    if (!csrfCookie) {
+        message.textContent = "CSRF token missing. Refresh the page and try again.";
+        return;
+    }
+
+    const csrfToken = decodeURIComponent(
+        csrfCookie.substring("XSRF-TOKEN=".length)
+    );
+
+    const items = billCartItems.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity
+    }));
+
+    button.disabled = true;
+    message.textContent = "Creating bill...";
+
+    try {
+        const response = await fetch("/api/bills", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-XSRF-TOKEN": csrfToken
+            },
+            body: JSON.stringify({
+                customerName: customerName,
+                customerPhone: customerPhone,
+                items: items
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        message.textContent = "Bill created successfully!";
+        billCartItems = [];
+        renderBillCart();
+
+        document.getElementById("customerName").value = "";
+        document.getElementById("customerPhone").value = "";
+
+        await loadProducts();
+        await loadBillingProducts();
+        await loadRecentBills();
+        await loadSalesSummary();
+
+    } catch (error) {
+        message.textContent = "Could not create bill: " + error.message;
+        console.error("Billing error:", error);
+
+    } finally {
+        button.disabled = false;
+    }
+}
+
+
+
+async function loadBillingProducts() {
+    const dropdown = document.getElementById("billProduct");
+
+    try {
+        const response = await fetch("/api/products");
+
+        if (!response.ok) {
+            throw new Error("Could not load products.");
+        }
+
+        billingProducts = await response.json();
+
+        dropdown.replaceChildren();
+
+        const firstOption = document.createElement("option");
+        firstOption.value = "";
+        firstOption.textContent = "Select a product";
+        dropdown.appendChild(firstOption);
+
+        billingProducts.forEach(product => {
+            const option = document.createElement("option");
+            option.value = product.id;
+            option.textContent =
+                product.name + " - ₹" +
+                Number(product.price).toFixed(2) +
+                " (Stock: " + product.quantity + ")";
+            dropdown.appendChild(option);
+        });
+
+    } catch (error) {
+        document.getElementById("billingMessage").textContent =
+            "Unable to load billing products: " + error.message;
+    }
+}
+
+function addToCart() {
+    const productId = Number(
+        document.getElementById("billProduct").value
+    );
+    const quantity = Number(
+        document.getElementById("billQuantity").value
+    );
+    const message = document.getElementById("billingMessage");
+
+    if (!productId || !Number.isInteger(quantity) || quantity <= 0) {
+        message.textContent = "Select a product and enter a valid quantity.";
+        return;
+    }
+
+    const product = billingProducts.find(p => p.id === productId);
+
+    if (!product) {
+        message.textContent = "Please select a valid product.";
+        return;
+    }
+
+    const existingItem = billCartItems.find(
+        item => item.productId === productId
+    );
+
+    const totalQuantity = quantity +
+        (existingItem ? existingItem.quantity : 0);
+
+    if (totalQuantity > product.quantity) {
+        message.textContent =
+            "Insufficient stock. Available: " + product.quantity;
+        return;
+    }
+
+    if (existingItem) {
+        existingItem.quantity = totalQuantity;
+    } else {
+        billCartItems.push({
+            productId: product.id,
+            name: product.name,
+            price: Number(product.price),
+            quantity: quantity
+        });
+    }
+
+    document.getElementById("billQuantity").value = 1;
+    message.textContent = "";
+    renderBillCart();
+}
+
+function renderBillCart() {
+    const table = document.getElementById("billCart");
+    const totalElement = document.getElementById("billTotal");
+
+    table.replaceChildren();
+    let total = 0;
+
+    if (billCartItems.length === 0) {
+        const row = table.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 5;
+        cell.textContent = "No items added yet.";
+    }
+
+    billCartItems.forEach(item => {
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+
+        const row = table.insertRow();
+
+        [item.name, item.price.toFixed(2), item.quantity,
+            subtotal.toFixed(2)].forEach(value => {
+            const cell = row.insertCell();
+            cell.textContent = value;
+        });
+
+        const actionCell = row.insertCell();
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.style.background = "#dc3545";
+        removeButton.addEventListener("click", () => {
+            billCartItems = billCartItems.filter(
+                cartItem => cartItem.productId !== item.productId
+            );
+            renderBillCart();
+        });
+
+        actionCell.appendChild(removeButton);
+    });
+
+    totalElement.textContent = total.toFixed(2);
+}
+
+    
+    
+    function showMessage(text) {
+        document.getElementById("message").textContent = text;
+    }
+    
+
+    function searchProducts() {
+        const searchText = document
+            .getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+        const rows = document.querySelectorAll("#productTable tr");
+
+        rows.forEach(row => {
+            const productId = row.cells[0]?.textContent.toLowerCase() || "";
+            const productName = row.cells[1]?.textContent.toLowerCase() || "";
+
+            if (
+                productId.includes(searchText) ||
+                productName.includes(searchText)
+            ) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    }
+
+
+    // Load products from the Spring Boot REST API.
+    async function loadProducts() {
+        const table = document.getElementById("productTable");
+        const message = document.getElementById("inventoryMessage");
+
+        message.textContent = "Loading products...";
+        message.className = "";
+
+        try {
+            const response = await fetch("/api/products");
+
+            console.log("Products status:", response.status);
+            console.log("Products content type:",
+                response.headers.get("content-type"));
+
+            if (!response.ok) {
+                throw new Error("HTTP " + response.status);
+            }
+
+            const products = await response.json();
+
+            // Update dashboard totals.
+            document.getElementById("products").textContent =
+                products.length;
+
+            const totalStock = products.reduce(
+                (sum, product) =>
+                    sum + Number(product.quantity || 0),
+                0
+            );
+
+            document.getElementById("stock").textContent = totalStock;
+
+            // Clear old rows safely.
+            table.replaceChildren();
+
+            if (products.length === 0) {
+                const row = table.insertRow();
+                const cell = row.insertCell();
+
+                cell.colSpan = 5;
+                cell.textContent = "No products added yet.";
+            } else {
+
+            	products.forEach(product => {
+            	    const row = table.insertRow();
+
+            	    const values = [
+            	        product.id,
+            	        product.name,
+            	        Number(product.price).toFixed(2),
+            	        product.quantity
+            	    ];
+
+            	    values.forEach(value => {
+            	        const cell = row.insertCell();
+            	        cell.textContent = value;
+            	    });
+
+            	    const actionCell = row.insertCell();
+
+            	    const editButton = document.createElement("button");
+            	    editButton.textContent = "Edit";
+            	    editButton.style.marginRight = "8px";
+
+            	    editButton.addEventListener("click", () => {
+            	        editProduct(product);
+            	    });
+
+            	    const deleteButton = document.createElement("button");
+            	    deleteButton.textContent = "Delete";
+            	    deleteButton.style.background = "#dc3545";
+
+            	    deleteButton.addEventListener("click", () => {
+            	        deleteProduct(product.id, product.name);
+            	    });
+
+            	    actionCell.append(editButton, deleteButton);
+            	});
+
+            }
+
+            message.textContent =
+                "Inventory loaded successfully: " +
+                products.length + " products.";
+
+            message.className = "status";
+
+        } catch (error) {
+            table.replaceChildren();
+
+            const row = table.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 5;
+            cell.textContent = "Unable to load products.";
+
+            message.textContent =
+                "Error loading inventory: " + error.message;
+
+            message.className = "error";
+
+            console.error("Product loading error:", error);
+        }
+    }
+
+    // Save a product using the Spring Boot API.
+    document.getElementById("productForm").addEventListener(
+        "submit",
+        async function(event) {
+            event.preventDefault();
+
+            const message = document.getElementById("productMessage");
+            const saveButton = document.getElementById("saveButton");
+
+            const product = {
+                name: document.getElementById("name").value.trim(),
+                price: Number(document.getElementById("price").value),
+                quantity: Number(document.getElementById("quantity").value)
+            };
+
+            if (
+                !product.name ||
+                !Number.isFinite(product.price) ||
+                product.price <= 0 ||
+                !Number.isInteger(product.quantity) ||
+                product.quantity < 0
+            ) {
+                message.textContent =
+                    "Enter a valid name, positive price and non-negative whole quantity.";
+                message.className = "error";
+                return;
+            }
+
+            saveButton.disabled = true;
+            message.textContent = "Saving product...";
+            message.className = "";
+
+            try {
+                const response = await fetch("/api/products", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(product)
+                });
+
+                if (!response.ok) {
+                    const details = await response.text();
+                    throw new Error(
+                        "HTTP " + response.status +
+                        (details ? ": " + details : "")
+                    );
+                }
+
+                const savedProduct = await response.json();
+
+                message.textContent =
+                    "Saved successfully! Product ID: " + savedProduct.id;
+
+                message.className = "status";
+
+                // Refresh the inventory after saving.
+                await loadProducts();
+
+                // Clear fields after successful save.
+                document.getElementById("name").value = "";
+                document.getElementById("price").value = "";
+                document.getElementById("quantity").value = "";
+
+            } catch (error) {
+                message.textContent =
+                    "Could not save product: " + error.message;
+
+                message.className = "error";
+
+                console.error("Product saving error:", error);
+            } finally {
+                saveButton.disabled = false;
+            }
+        }
+    );
+
+    // Load inventory when the page is ready.
+    
+async function editProduct(product) {
+    const name = prompt("Enter product name:", product.name);
+    if (name === null) return;
+
+    if (!name.trim()) {
+        alert("Product name cannot be empty.");
+        return;
+    }
+
+    const priceText = prompt("Enter price:", product.price);
+    if (priceText === null) return;
+
+    const price = Number(priceText);
+    if (!Number.isFinite(price) || price <= 0) {
+        alert("Enter a valid price greater than zero.");
+        return;
+    }
+
+    const quantityText = prompt("Enter quantity:", product.quantity);
+    if (quantityText === null) return;
+
+    const quantity = Number(quantityText);
+    if (!Number.isInteger(quantity) || quantity < 0) {
+        alert("Quantity must be a non-negative whole number.");
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/products/" + product.id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name.trim(),
+                price: price,
+                quantity: quantity
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        alert("Product updated successfully!");
+        await loadProducts();
+
+    } catch (error) {
+        alert("Could not update product: " + error.message);
+        console.error(error);
+    }
+}
+
+async function deleteProduct(id, name) {
+    const confirmed = confirm(
+        'Are you sure you want to delete "' + name + '"?'
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const response = await fetch("/api/products/" + id, {
+            method: "DELETE"
+        });
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        alert("Product deleted successfully!");
+        await loadProducts();
+
+    } catch (error) {
+        alert("Could not delete product: " + error.message);
+        console.error(error);
+    }
+}
+
+
+
+async function loadRecentBills() {
+    const table = document.getElementById("recentBillsTable");
+    const message = document.getElementById("recentBillsMessage");
+
+    table.replaceChildren();
+    message.textContent = "Loading bills...";
+
+    try {
+        const response = await fetch("/api/bills");
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const bills = await response.json();
+
+        table.replaceChildren();
+        message.textContent = "";
+
+        if (bills.length === 0) {
+            const row = table.insertRow();
+            const cell = row.insertCell();
+
+            cell.colSpan = 7;
+            cell.textContent = "No bills found yet.";
+
+            return;
+        }
+
+        bills.slice().reverse().forEach(bill => {
+            const row = table.insertRow();
+
+            // Column 1: Bill ID
+            row.insertCell().textContent = bill.id;
+
+            // Column 2: Date and Time
+            row.insertCell().textContent =
+                new Date(bill.createdAt).toLocaleString("en-IN");
+
+            // Column 3: Customer Name
+            row.insertCell().textContent =
+                bill.customerName || "Walk-in Customer";
+
+            // Column 4: Customer Phone
+            row.insertCell().textContent =
+                bill.customerPhone || "Not provided";
+
+            // Column 5: Products
+            row.insertCell().textContent = bill.items
+                .map(item => item.productName + " × " + item.quantity)
+                .join(", ");
+
+            // Column 6: Total Amount
+            row.insertCell().textContent =
+                "₹" + Number(bill.totalAmount).toFixed(2);
+
+            // Column 7: Print Receipt
+            const actionCell = row.insertCell();
+            const printButton = document.createElement("button");
+
+            printButton.textContent = "Print Receipt";
+
+            printButton.addEventListener("click", () => {
+                printBill(bill);
+            });
+
+            actionCell.appendChild(printButton);
+        });
+
+    } catch (error) {
+        table.replaceChildren();
+        message.textContent =
+            "Could not load bills: " + error.message;
+    }
+}
+
+
+function printBill(bill) {
+
+    const receiptWindow = window.open("", "_blank", "width=500,height=650");
+
+    if (!receiptWindow) {
+        alert("Please allow pop-ups to print the receipt.");
+        return;
+    }
+
+    const escapeHtml = value =>
+        String(value).replace(/[&<>"']/g, character => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[character]);
+
+    const productRows = bill.items.map(item => `
+        <tr>
+            <td>${escapeHtml(item.productName)}</td>
+            <td>${item.quantity}</td>
+            <td>₹${Number(item.unitPrice).toFixed(2)}</td>
+            <td>₹${Number(item.subtotal).toFixed(2)}</td>
+        </tr>
+    `).join("");
+
+    const customerName = bill.customerName
+        ? escapeHtml(bill.customerName)
+        : "Walk-in Customer";
+
+    const customerPhone = bill.customerPhone
+        ? escapeHtml(bill.customerPhone)
+        : "Not provided";
+
+    receiptWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>FreshMart Receipt - Bill ${bill.id}</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    color: #222;
+                }
+
+                h1, p {
+                    text-align: center;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                }
+
+                th, td {
+                    border-bottom: 1px solid #ddd;
+                    padding: 8px 4px;
+                    text-align: left;
+                }
+
+                .customer-details {
+                    margin-top: 20px;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                }
+
+                .total {
+                    text-align: right;
+                    margin-top: 20px;
+                }
+
+                @media print {
+                    button {
+                        display: none;
+                    }
+                }
+                </style>
+        </head>
+        <body>
+            <h1>FreshMart</h1>
+            <p>Grocery Store Receipt</p>
+
+            <p>Bill ID: ${bill.id}</p>
+            <p>Date: ${escapeHtml(
+                new Date(bill.createdAt).toLocaleString("en-IN")
+            )}</p>
+
+            <div class="customer-details">
+                <p><strong>Customer:</strong> ${customerName}</p>
+                <p><strong>Phone:</strong> ${customerPhone}</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>${productRows}</tbody>
+            </table>
+
+            <h3 class="total">
+                Total: ₹${Number(bill.totalAmount).toFixed(2)}
+            </h3>
+
+            <p>Thank you for shopping with FreshMart!</p>
+            <button onclick="window.print()">Print</button>
+        </body>
+        </html>
+    `);
+
+    receiptWindow.document.close();
+}
+
+
+
+
+
+async function loadSalesSummary() {
+    const message = document.getElementById("salesSummaryMessage");
+
+    try {
+        const response = await fetch("/api/bills");
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const bills = await response.json();
+
+        // Calculate total revenue from all bills
+        const revenue = bills.reduce(
+            (sum, bill) => sum + Number(bill.totalAmount),
+            0
+        );
+
+        // Calculate today's sales only
+        const today = new Date();
+
+        const todaySales = bills
+            .filter(bill => {
+                const billDate = new Date(bill.createdAt);
+
+                return billDate.getFullYear() === today.getFullYear() &&
+                       billDate.getMonth() === today.getMonth() &&
+                       billDate.getDate() === today.getDate();
+            })
+            .reduce(
+                (sum, bill) => sum + Number(bill.totalAmount),
+                0
+            );
+
+        // Update dashboard Today's Sales card
+        document.getElementById("sales").textContent =
+            "₹" + todaySales.toFixed(2);
+
+        // Update Sales Summary
+        document.getElementById("totalRevenue").textContent =
+            revenue.toFixed(2);
+
+        document.getElementById("totalBills").textContent =
+            bills.length;
+
+        document.getElementById("averageBill").textContent =
+            bills.length ? (revenue / bills.length).toFixed(2) : "0.00";
+
+        message.textContent = "";
+
+    } catch (error) {
+        message.textContent =
+            "Could not load sales summary: " + error.message;
+    }
+}
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", loadProducts);
+document.addEventListener("DOMContentLoaded", loadBillingProducts);
+document.addEventListener("DOMContentLoaded", loadRecentBills);
+document.addEventListener("DOMContentLoaded", loadSalesSummary);
+
+
+</script>
+
+
+
+
+</body>
+</html>
